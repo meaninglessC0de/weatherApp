@@ -1,0 +1,1 @@
+users = {} #username to User
