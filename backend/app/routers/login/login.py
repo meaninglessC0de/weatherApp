@@ -24,7 +24,7 @@ def login(user: User):
         raise HTTPException(401, "invalid details") 
     tok = secrets.token_urlsafe(24)
     sessions[tok] = user.username
-    return {"access_token": tok, "token_type": "bearer"}
+    return {"token": tok, "token_type": "bearer"}
 
 @login_router.post("/logout")
 def logout(token: str = Header(None)):

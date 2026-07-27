@@ -9,6 +9,5 @@ async def fetch(lat: float, lon: float, name: str) -> dict:
         "https://api.openweathermap.org/data/2.5/weather",
         params={"lat": lat, "lon": lon, "appid": settings.weather_api_key, "units": "metric"},
     )
-    r.raise_for_status()
     data = r.json()
     return {"temp": data["main"]["temp"], "desc": data["weather"][0]["description"], "name": name}
