@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .routers.login import login
+from .routers.citydetail import citydetail
 
 app = FastAPI()
 
@@ -15,6 +17,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(login.login_router)
+app.include_router(citydetail.router)
 
 @app.get("/")
 def health():
