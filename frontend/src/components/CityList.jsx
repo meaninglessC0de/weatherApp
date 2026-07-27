@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./CityList.css";
 
 const API_URL = "http://127.0.0.1:8000";
@@ -6,6 +7,7 @@ const API_URL = "http://127.0.0.1:8000";
 export default function CityList() {
   const [cities, setCities] = useState([]);
   const [newCity, setNewCity] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCities();
@@ -91,10 +93,13 @@ export default function CityList() {
 
       <ul>
         {cities.map((city) => (
-          <li key={city.id}>
-            <span>📍 {city.city}</span>
+          <li key={city.code}>
+            <span  style={{ cursor: "pointer" }}
+  onClick={() => navigate(`/city/${city.code}`)}
+>
+  📍 {city.name}</span>
 
-            <button onClick={() => deleteCity(city.id)}>Delete</button>
+            <button onClick={() => deleteCity(city.code)}>Delete</button>
           </li>
         ))}
       </ul>
