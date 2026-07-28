@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Body
 from .weather import fetch
-from ..models.cities import cities
-
+from ...models.cities import cities
 router = APIRouter()
 
 @router.get("/city/{code}")

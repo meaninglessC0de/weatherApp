@@ -1,47 +1,46 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from ..models.cities import cities as all_cities
+from ...models.cities import cities as all_cities
+from ...models.chosen import chosen
 
 router = APIRouter()
 
-cities = [
-    {
-        "id": 1,
-        "name": "London",
-        "code": "GB",
-        "lat": 51.5074,
-        "lon": -0.1278,
-    }
-]
+
+@router.get("/cities/all")
+def get_all_cities():
+    return all_cities
 
 
-@router.get("/cities")
-def get_cities():
-    return cities
-
-class City(BaseModel):
-    city: str
+@router.get("/cities/{user}")
+def get_cities(user: str):
+    return chosen.setdefault(user, [])
 
 
-@router.post("/cities")
-def add_city(new_city: City):
+class InCity(BaseModel):
+    code: str
 
-    new_id = len(cities) + 1
+
+@router.post("/cities/{user}")
+def add_city(user: str, new_city: InCity):
 
     selected_city = next(
         (
             city for city in all_cities
-            if city["name"].lower() == new_city.city.lower()
+            if city["code"].upper() == new_city.code.upper()
         ),
         None,
     )
 
     if selected_city is None:
-        return {"message": "City not found"}
+        raise HTTPException(status_code=404, detail="City not found")
 
-    cities.append(
+    user_cities = chosen.setdefault(user, [])
+
+    if any(city["code"] == selected_city["code"] for city in user_cities):
+        return {"message": "City already added"}
+
+    user_cities.append(
         {
-            "id": new_id,
             "name": selected_city["name"],
             "code": selected_city["code"],
             "lat": selected_city["lat"],
@@ -51,14 +50,15 @@ def add_city(new_city: City):
 
     return {"message": "City added successfully"}
 
-@router.delete("/cities/{city_id}")
-def delete_city(city_id: int):
 
-    global cities
+@router.delete("/cities/{user}/{code}")
+def delete_city(user: str, code: str):
 
-    cities = [
-        city for city in cities
-        if city["id"] != city_id
+    user_cities = chosen.setdefault(user, [])
+
+    user_cities[:] = [
+        city for city in user_cities
+        if city["code"] != code
     ]
 
     return {

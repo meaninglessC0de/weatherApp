@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 
 export default function CityDetail() {
     const [weather, setWeather] = useState()
@@ -19,11 +19,16 @@ export default function CityDetail() {
         fetchWeather()
     },[])
   return (
-    <div>
-      <p>Hi</p>
-        <p>Country: {name} </p>
-        <p>Temperature: {temperature}</p>
-        <p>Weather: {weather}</p>
-    </div>
+            <div className="container" style={{ maxWidth: "400px" }}>
+            <div className="card">
+                <div className="card-body">
+                    <h4 className="card-title mb-3">{name}</h4>
+                    <p>Temperature: {temperature}</p>
+                    <p>Weather: {weather}</p>
+                    <Link to={`/city/${code}/map`}>Map</Link>
+                </div>  
+            </div>
+        </div>
+
   )
 }

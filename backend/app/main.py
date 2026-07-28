@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers.login import login
 from .routers.citydetail import citydetail
-from .routers.models.cities import cities as all_cities
+from .models.cities import cities as all_cities
 from .routers.citylist import citylist
 from pydantic import BaseModel
 
