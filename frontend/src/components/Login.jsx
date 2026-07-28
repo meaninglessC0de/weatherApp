@@ -4,8 +4,8 @@ import { useAuth } from "./AuthContext";
 
 export default function Login() {
   const { user, setToken, logout } = useAuth();
-  const [form, setForm] = useState({ username: "", password: "" })
-  const [error, setError] = useState("")
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
 
   async function login() {
     const res = await fetch("http://localhost:8000/login", {
@@ -27,12 +27,16 @@ export default function Login() {
       <div className="container" style={{ maxWidth: "400px" }}>
         <div className="card shadow-sm">
           <div className="card-body text-center">
-            <p className="mb-3">Current user: <strong>{user}</strong></p>
-            <button className="btn btn-outline-dark" onClick={logout}>Log out</button>
+            <p className="mb-3">
+              Current user: <strong>{user}</strong>
+            </p>
+            <button className="btn btn-outline-dark" onClick={logout}>
+              Log out
+            </button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -41,16 +45,35 @@ export default function Login() {
         <div className="card-body">
           <h4 className="card-title mb-3">Login</h4>
 
-          <input className="form-control mb-3" value={form.username} onChange={(e) => setForm((prev) => ({ ...prev, username: e.target.value }))} placeholder="username" />
-          <input className="form-control mb-3" type="password" value={form.password} onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))} placeholder="password" />
+          <input
+            className="form-control mb-3"
+            value={form.username}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, username: e.target.value }))
+            }
+            placeholder="username"
+          />
+          <input
+            className="form-control mb-3"
+            type="password"
+            value={form.password}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, password: e.target.value }))
+            }
+            placeholder="password"
+          />
 
           {error && <p>{error}</p>}
 
-          <button className="btn btn-dark w-100" onClick={login}>Log In</button>
+          <button className="btn btn-dark w-100" onClick={login}>
+            Log In
+          </button>
 
-          <p>No account? <Link to="/signup">Sign up</Link></p>
+          <p>
+            No account? <Link to="/signup">Sign up</Link>
+          </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

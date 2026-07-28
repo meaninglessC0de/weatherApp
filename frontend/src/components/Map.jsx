@@ -20,9 +20,7 @@ export default function Map() {
         zoom={10}
         style={{ height: "500px", width: "100%" }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         <Marker position={[lat, lon]}>
           <Popup>{name}</Popup>

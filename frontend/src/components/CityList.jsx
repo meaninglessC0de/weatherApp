@@ -94,7 +94,7 @@ export default function CityList() {
       console.error(error);
     }
   }
-  
+
   // keep track of what we have added and what we do not
 
   return (
