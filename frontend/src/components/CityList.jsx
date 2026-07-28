@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CityList.css";
+import { useAuth } from "./AuthContext";
 
 const API_URL = "http://127.0.0.1:8000";
 
 export default function CityList() {
   const [cities, setCities] = useState([]);
-  const [newCity, setNewCity] = useState("");
+  const [allCities, setAllCities] = useState([]);
+  const [selectedCode, setSelectedCode] = useState("");
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCities();
+    fetchAllCities();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchCities();
+    }
+  }, [user]);
 
   async function fetchCities() {
     try {
-      const response = await fetch(`${API_URL}/cities`);
+      const response = await fetch(`${API_URL}/cities/${user}`);
 
       if (!response.ok) {
         throw new Error("Could not fetch cities");
@@ -28,21 +37,34 @@ export default function CityList() {
     }
   }
 
-  async function addCity() {
-    const cityName = newCity.trim();
+  async function fetchAllCities() {
+    try {
+      const response = await fetch(`${API_URL}/cities/all`);
 
-    if (cityName === "") {
+      if (!response.ok) {
+        throw new Error("Could not fetch city list");
+      }
+
+      const data = await response.json();
+      setAllCities(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function addCity() {
+    if (selectedCode === "") {
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/cities`, {
+      const response = await fetch(`${API_URL}/cities/${user}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          city: cityName,
+          code: selectedCode,
         }),
       });
 
@@ -50,7 +72,7 @@ export default function CityList() {
         throw new Error("Could not add city");
       }
 
-      setNewCity("");
+      setSelectedCode("");
       await fetchCities();
     } catch (error) {
       console.error(error);
@@ -59,7 +81,7 @@ export default function CityList() {
 
   async function deleteCity(cityId) {
     try {
-      const response = await fetch(`${API_URL}/cities/${cityId}`, {
+      const response = await fetch(`${API_URL}/cities/${user}/${cityId}`, {
         method: "DELETE",
       });
 
@@ -72,32 +94,38 @@ export default function CityList() {
       console.error(error);
     }
   }
+  
+  // keep track of what we have added and what we do not
 
   return (
     <div className="city-container">
-      <h1>🌤️ MY CITY LIST</h1>
+      {user && <h1>{`${user}'s`} City List</h1>}
 
-      <input
-        type="text"
-        value={newCity}
-        placeholder="Enter a city"
-        onChange={(event) => setNewCity(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            addCity();
-          }
-        }}
-      />
+      <select
+        value={selectedCode}
+        onChange={(event) => setSelectedCode(event.target.value)}
+      >
+        <option value="">Select a city</option>
+        {allCities.map((city) => (
+          <option key={city.code} value={city.code}>
+            {city.name}
+          </option>
+        ))}
+      </select>
 
-      <button onClick={addCity}>Add City</button>
+      <button onClick={addCity} disabled={selectedCode === ""}>
+        Add City
+      </button>
 
       <ul>
         {cities.map((city) => (
           <li key={city.code}>
-            <span  style={{ cursor: "pointer" }}
-  onClick={() => navigate(`/city/${city.code}`)}
->
-  📍 {city.name}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate(`/city/${city.code}`)}
+            >
+              📍 {city.name}
+            </span>
 
             <button onClick={() => deleteCity(city.id)}>Delete</button>
           </li>
@@ -108,5 +136,3 @@ export default function CityList() {
     </div>
   );
 }
-
-

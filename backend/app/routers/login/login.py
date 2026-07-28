@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Header, Depends
 from .users import users
-from ..models.user import User
+from ...models.user import User
 import secrets
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 

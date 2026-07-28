@@ -24,6 +24,7 @@ export default function CityDetail() {
         fetchWeather()
     },[])
   return (
+<<<<<<< HEAD
     <div>
       <p>Hi</p>
         <p>Country: {name} </p>
@@ -43,5 +44,18 @@ export default function CityDetail() {
   View Map
 </button>
     </div>
+=======
+            <div className="container" style={{ maxWidth: "400px" }}>
+            <div className="card">
+                <div className="card-body">
+                    <h4 className="card-title mb-3">{name}</h4>
+                    <p>Temperature: {temperature}</p>
+                    <p>Weather: {weather}</p>
+                    <Link to={`/city/${code}/map`}>Map</Link>
+                </div>  
+            </div>
+        </div>
+
+>>>>>>> 38cdbfb2bbde7069769353768b482ead1e1407ad
   )
 }

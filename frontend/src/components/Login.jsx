@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+
 export default function Login() {
-  const { token, user, setToken, logout } = useAuth();
-  const [form, setForm] = useState({username: "", password: ""})
+  const { user, setToken, logout } = useAuth();
+  const [form, setForm] = useState({ username: "", password: "" })
   const [error, setError] = useState("")
 
   async function login() {
@@ -20,25 +22,35 @@ export default function Login() {
     setToken(data.token);
   }
 
-  if (user){
+  if (user) {
     return (
-      <div>
-        <p>Current user: {user}</p>
-        <button onClick = {logout}>Log out</button>
+      <div className="container" style={{ maxWidth: "400px" }}>
+        <div className="card shadow-sm">
+          <div className="card-body text-center">
+            <p className="mb-3">Current user: <strong>{user}</strong></p>
+            <button className="btn btn-outline-dark" onClick={logout}>Log out</button>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <>
-      <div>Login</div>
-      <div>
-        <input value = {form.username} onChange={(e)=>setForm((prev)=>({...prev, username: e.target.value}))} placeholder = "username"/>
-        <input type = "password" value = {form.password} onChange={(e)=>setForm((prev)=>({...prev, password: e.target.value}))}/>
-        {error && <p>{error}</p>}
-        <button onClick={login}>Log In</button>
+    <div className="container" style={{ maxWidth: "400px" }}>
+      <div className="card">
+        <div className="card-body">
+          <h4 className="card-title mb-3">Login</h4>
+
+          <input className="form-control mb-3" value={form.username} onChange={(e) => setForm((prev) => ({ ...prev, username: e.target.value }))} placeholder="username" />
+          <input className="form-control mb-3" type="password" value={form.password} onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))} placeholder="password" />
+
+          {error && <p>{error}</p>}
+
+          <button className="btn btn-dark w-100" onClick={login}>Log In</button>
+
+          <p>No account? <Link to="/signup">Sign up</Link></p>
+        </div>
       </div>
-    </>
-    
+    </div>
   )
 }
