@@ -10,4 +10,10 @@ async def fetch(lat: float, lon: float, name: str) -> dict:
         params={"lat": lat, "lon": lon, "appid": settings.weather_api_key, "units": "metric"},
     )
     data = r.json()
-    return {"temp": data["main"]["temp"], "desc": data["weather"][0]["description"], "name": name}
+    return {
+    "temp": data["main"]["temp"],
+    "desc": data["weather"][0]["description"],
+    "name": name,
+    "lat": lat,
+    "lon": lon,
+    }

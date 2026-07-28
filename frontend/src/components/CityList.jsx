@@ -99,7 +99,7 @@ export default function CityList() {
 >
   📍 {city.name}</span>
 
-            <button onClick={() => deleteCity(city.code)}>Delete</button>
+            <button onClick={() => deleteCity(city.id)}>Delete</button>
           </li>
         ))}
       </ul>
