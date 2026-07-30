@@ -76,15 +76,25 @@ useEffect(() => {
         </ul>
     </>
 )}
-        {showAttractions && (
+
+          {showAttractions && (
     <>
         <h3>🏛 Top Tourist Attractions</h3>
 
-        <ul>
-              {attractions.map((place, index) => (
-                  <li key={index}>{place.name}</li>
-            ))}
-        </ul>
+        {attractions.map((place, index) => (
+            <div
+                key={index}
+                style={{
+                    border: "1px solid #ddd",
+                    padding: "10px",
+                    margin: "10px 0",
+                    borderRadius: "8px",
+                    backgroundColor: "#f9f9f9"
+                }}
+            >
+                📍 {place.name}
+            </div>
+        ))}
     </>
 )}
 
